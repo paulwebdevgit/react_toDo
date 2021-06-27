@@ -1,26 +1,34 @@
 import {useState} from 'react'
 
-export default function ToDoForm(){
+export default function ToDoForm({addTask}){
 
-    const [userImput, setUserImput] = useState('')
+    const [userInput, setuserInput] = useState('')
 
-    const handleSubmit = () => {
-        
-    }
     const handleChange = (e) => {
-        setUserImput(e.target.value);
+        setuserInput(e.target.value);
     }
-    const handleKeyPress = () =>{
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        addTask(userInput);
+        setuserInput("");
     }
+
+    // const handleKeyPress = (e) =>{
+    //     if(e.key === "Enter"){
+    //         handleSubmit(e)
+    //     }
+    // }
     
     return(
         <form onSubmit = {handleSubmit}>
+            
             <input
-                value={userImput}
+                className="text"
+                value={userInput}
                 type="text"
                 onChange = {handleChange}
-                onKeyDown = {handleKeyPress}
+                // onKeyDown = {handleKeyPress}
                 placeholder = "Wert eingeben"
             />
             <button>Add</button>

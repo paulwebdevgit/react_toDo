@@ -1,33 +1,69 @@
 import ToDoForm from './ToDoForm'
 import ToDo from './ToDo'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+
 
 
 
 function App() {
-  const [toDos, setToDos] = useState([]);
+  const [toDos, setToDos] = useState(JSON.parse(localStorage.getItem("items")) || []);
 
-  const addTask = () => {
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(toDos))
+  }, [toDos])
 
+  const addTask = (userInput) => {
+      if (userInput){
+        const newItem = {
+          id: Math.random().toString(36).substr(2,9),
+          task: userInput,
+          complete: false
+        }
+        setToDos([...toDos, newItem])
+      }
+      
   }
 
-  const deleteTask = () => {
-    
+  const deleteTask = (id) => {
+    const updatedToDos = [...toDos].filter((todo) => todo.id !== id)
+    setToDos(updatedToDos)
   }
-  const handleToggle = () => {
-    
-  }
+
+  
+  // const handleToggle = (id) =>{
+  // const editedToDo =  toDos.map((item) => {
+  //     if(item.id === id){
+  //      return { ...item, complete: !item.complete}
+  //     }
+  //     else {
+  //      return item
+  //     }
+  //   })
+  //   setToDos(editedToDo)
+  //   console.log(toDos, id)
+  // }
+
+  const handleToggle = (id) => {
+      setToDos([...toDos.map((todo) => todo.id === id ? {...todo, complete: !todo.complete} : {...todo})])
+    }
+
+  
+
+
   return (
     <div className="App">
       <header>
-        <h1> ToDo list:{toDos.length} </h1>
+        <div className="title"> ToDo List: {toDos.length} </div>
       </header>
       <ToDoForm addTask={addTask}/>
       {toDos.map((item,index) => {
+        
         return(
          <ToDo 
+           
             todo = {item}
-            key = {index}
+            key = {item.id}
+            index = {index+1}
             toggleTask = {handleToggle}
             deleteTask = {deleteTask}
          />
