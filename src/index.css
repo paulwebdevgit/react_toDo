@@ -19,6 +19,9 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.wrapper{
+  display: inline-block;
+}
 
 .item-todo:nth-child(4n+1){
   background: linear-gradient(to right, #7f00ff, #e100ff);

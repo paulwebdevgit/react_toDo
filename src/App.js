@@ -1,6 +1,8 @@
 import ToDoForm from './ToDoForm'
-import ToDo from './ToDo'
+
 import {useState, useEffect} from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {ReactComponent as ReactLogo} from "./delete.svg";
 
 
 
@@ -47,29 +49,85 @@ function App() {
       setToDos([...toDos.map((todo) => todo.id === id ? {...todo, complete: !todo.complete} : {...todo})])
     }
 
+    const onBeforeCapture = () => {
+      /*...*/
+    };
+    const onBeforeDragStart = () => {
+      /*...*/
+    };
+    const onDragStart = () => {
+      /*...*/
+    };
+    const onDragUpdate = () => {
+      /*...*/
+    };
+    const onDragEnd = (result) => {
+      console.log(result);
+      if (!result.destination) {
+        return;
+      }
   
+      if (result.destination.index === result.source.index) {
+        return;
+      }
+      const items = Array.from(toDos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
+    setToDos(items);
+    };
 
   return (
+   
     <div className="App">
       <header>
         <div className="title"> ToDo List: {toDos.length} </div>
       </header>
+
       <ToDoForm addTask={addTask}/>
-      {toDos.map((item,index) => {
-        
-        return(
-         <ToDo 
-           
-            todo = {item}
-            key = {item.id}
-            index = {index+1}
-            toggleTask = {handleToggle}
-            deleteTask = {deleteTask}
-         />
-        )
-      })}
+      <DragDropContext
+          onBeforeCapture={onBeforeCapture}
+          onBeforeDragStart={onBeforeDragStart}
+          onDragStart={onDragStart}
+          onDragUpdate={onDragUpdate}
+          onDragEnd={onDragEnd}
+      >  
+      <Droppable droppableId="droppable">
+      {(provided) => (
+        <div className="wrapper" {...provided.droppableProps} ref={provided.innerRef}>
+        {toDos.map((item,index) => {
+          return(
+            <Draggable key={item.id} draggableId={item.id} index={index}>
+                {(provided) => (
+                    <div className="item-todo"{...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                        <label className="container">
+                            <input onClick={() => handleToggle(item.id)} type="checkbox"/>
+                            <span className="checkmark"></span>
+                        </label>
+                        <div className={ item.complete ? "item-text strike" : "item-text"}>
+                        {index}. {item.task}
+                        </div>
+                        <div 
+                            className="item-delete" 
+                            onClick={() => deleteTask(item.id)}
+                        >
+                            {/* <img className="icon" src={svg} alt="icon"></img> */}
+                            <ReactLogo />
+                        </div>
+                    </div> 
+                )}
+               </Draggable>  
+                 
+          )
+        })}
+        {provided.placeholder}
+        </div>
+      )}
+     
+      </Droppable>
+       </DragDropContext>
     </div>
+    
   );
 }
 
