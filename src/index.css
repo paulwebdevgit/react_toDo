@@ -1,14 +1,28 @@
 .App {
   text-align: center;
 }
+.wrapper{
+  display: inline-block;
+}
 
+.item-wrapper{
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.item-todo-inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .App .item-todo {
   position: relative;
-  padding: 14px;
+  padding: 10px;
   width: 250px;
   margin: 0 auto;
   text-align: left;
-  margin-top: 15px;
+  margin-right: 20px;
   background: linear-gradient(
     90deg,
     rgba(93, 12, 255, 1) 0%,
@@ -19,8 +33,15 @@
   border-radius: 5px;
   cursor: pointer;
 }
-.wrapper{
-  display: inline-block;
+
+.textArea{
+  width: 485px;
+    height: 82px;
+  padding: 10px 10px;
+  border-radius: 4px 0 0 4px;
+  border: 2px solid #5d0cff;
+  text-align: left;
+  background: transparent;
 }
 
 .item-todo:nth-child(4n+1){
@@ -147,6 +168,7 @@
   position: relative;
   left: -4px;
   bottom: 5px;
+  transform: translateY(25%);
 }
 
 .strike{
